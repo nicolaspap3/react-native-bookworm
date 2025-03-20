@@ -8,9 +8,9 @@ const router = express.Router()
 router.post("/", protectRoute, async (req, res) => {
   try {
     const { title, caption, rating, image } = req.body;
-    // if (!title || !image || !caption || !rating) {
-    //   return res.status(400).json({ message: "Please provide all fields" })
-    // }
+    if (!title || !image || !caption || !rating) {
+      return res.status(400).json({ message: "Please provide all fields" })
+    }
     // import the image to cloudinary
     const uploadResponse = await cloudinary.uploader.upload(image)
     const imageUrl = uploadResponse.secure_url

@@ -10,8 +10,15 @@ const bookSchema = new mongoose.Schema({
     required: true
   },
   image: {
-    type: String,
-    required: true
+    type: Buffer,
+    required: true,
+    set: (val) => {
+      if (typeof val === "string") {
+        const rawBase64 = val.replace(/data:image\/\w+;base64,/, "")
+        return Buffer.from(rawBase64, "base64")
+      }
+      return val;
+    }
   },
   rating: {
     type: Number,
@@ -25,6 +32,12 @@ const bookSchema = new mongoose.Schema({
     required: true
   }
 }, { timestamps: true })
+
+bookSchema.set("toJSON", {
+  transform: function (doc, ret) {
+    ret.image = "data:image/webp;base64" + doc.image.toString("base64")
+  }
+})
 
 const Book = mongoose.model("Book", bookSchema)
 
