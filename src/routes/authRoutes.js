@@ -36,11 +36,11 @@ router.post("/register", async (req, res) => {
     const avatar = `https://api.dicebear.com/9.x/avataaars/svg?seed=${username}`;
     const user = new User({ email, username, password, profileImage: avatar });
     await user.save();
-    const token = generateToken(user._id);
+    const token = generateToken(user.id);
     res.status(201).json({
       token,
       user: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
         profileImage: user.profileImage,
@@ -64,11 +64,11 @@ router.post("/login", async (req, res) => {
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid credentials" });
-    const token = generateToken(user._id);
+    const token = generateToken(user.id);
     res.status(200).json({
       token,
       user: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
         profileImage: user.profileImage,
