@@ -49,7 +49,7 @@ router.get("/", protectRoute, async (req, res) => {
     //   totalBooks,
     //   totalPages: Math.ceil(totalBooks / limit),
     // });
-    res.status(200).json({ books, totalPages, totalBooks });
+    res.status(200).json({ books, totalPages: Math.ceil(totalBooks / limit) });
   } catch (error) {
     console.log("Error in get all books route", error);
     res.status(500).json({ message: "Internal server error" });
